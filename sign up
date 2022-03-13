@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Signuptitle"
+        android:text="signup"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_margin="25dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Alreadyhaveanaccount"
+        android:layout_below="@id/Signuptitle"
+        android:text="Already have an account? Sign in"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        />
+
+
+    <EditText
+        android:id="@+id/Email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Alreadyhaveanaccount"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:drawablePadding="20sp"
+        android:hint="Email"
+        android:padding="20dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Password"
+        android:layout_below="@id/Email"
+        android:hint="Password"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:layout_margin="10dp"
+        android:padding="20dp"
+        android:drawablePadding="20sp"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Secret"
+        android:layout_below="@id/Password"
+        android:hint="Secret"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:layout_margin="10dp"
+        android:padding="20dp"
+        android:drawablePadding="20sp"
+        android:inputType="textPassword"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Signupbtn"
+        android:text="Sign Up"
+        android:textSize="20sp"
+        android:layout_below="@id/Secret"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/other"
+        android:layout_below="@id/Signupbtn"
+        android:text="By clicking the signup button,you are creating an account,and you agree to the Terms of Use."
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        />
+
+
+
+
+
+</RelativeLayout>
+package com.example.signup;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+public class MainActivity extends AppCompatActivity {
+    EditText Email,Password,Secret;
+    MaterialButton Signupbtn;
+    DatabaseReference reff;
+    Register register;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Email=(EditText) findViewById(R.id.Email);
+        Password=(EditText) findViewById(R.id.Password);
+        Secret=(EditText) findViewById(R.id.Secret);
+        Signupbtn=(MaterialButton) findViewById(R.id.Signupbtn);
+        register=new Register();
+        reff= FirebaseDatabase.getInstance().getReference().child("Register");
+        Signupbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Long Pass=Long.parseLong(Password.getText().toString().trim());
+                Long Secre=Long.parseLong(Secret.getText().toString().trim());
+
+                register.setEmail(Email.getText().toString().trim());
+                register.setPassword(Pass);
+                register.setSecret(Secre);
+
+                reff.push().setValue(register);
+                Toast.makeText(MainActivity.this, "run successfully", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+
+
+
+    }
+}
+package com.example.signup;
+
+public class Register {
+
+    private String Email;
+    private Long Password;
+    private Long Secret;
+
+    public Register() {
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+    public Long getPassword() {
+        return Password;
+    }
+
+    public void setPassword(Long password) {
+        Password = password;
+    }
+
+    public Long getSecret() {
+        return Secret;
+    }
+
+    public void setSecret(Long secret) {
+        Secret = secret;
+    }
+}
+
