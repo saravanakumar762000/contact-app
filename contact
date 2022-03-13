@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ContactFormandContactListPage"
+        android:text="Contact Form and Contact List Page"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/AddContacts"
+        android:text="Add Contacts"
+        android:layout_below="@id/ContactFormandContactListPage"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_margin="2dp"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Name"
+        android:layout_below="@id/AddContacts"
+        android:hint="Name"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:layout_margin="10dp"
+        android:padding="20dp"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Phno"
+        android:layout_below="@id/Name"
+        android:hint="Phno"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:layout_margin="10dp"
+        android:padding="20dp"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Email"
+        android:layout_below="@id/Phno"
+        android:hint="Email"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:layout_margin="10dp"
+        android:padding="20dp"/>
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Savebtn"
+        android:text="Save"
+        android:textSize="20dp"
+        android:layout_below="@id/Email"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"/>
+
+</RelativeLayout>
+java class:
+
+package com.example.contact;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+public class MainActivity extends AppCompatActivity {
+    EditText Name,Phno,Email;
+    MaterialButton Savebtn;
+    DatabaseReference reff;
+    Member member;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Name = (EditText) findViewById(R.id.Name);
+        Phno=(EditText) findViewById(R.id.Phno);
+        Email=(EditText) findViewById(R.id.Email);
+        Savebtn=(MaterialButton)findViewById(R.id.Savebtn);
+        member=new Member();
+        reff= FirebaseDatabase.getInstance().getReference().child("Member");
+        Savebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Long Phn= Long.parseLong(Phno.getText() .toString().trim());
+
+
+                member.setName(Name.getText().toString());
+                member.setPhno(Phn);
+                member.setEmail(Email.getText().toString());
+                reff.push().setValue(member);
+                Toast.makeText(MainActivity.this, "run successfully", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+
+
+    }
+}
+Member:
+package com.example.contact;
+
+public class Member {
+
+    private String Name;
+    private Long Phno;
+    private String Email;
+
+    public Member() {
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public Long getPhno() {
+        return Phno;
+    }
+
+    public void setPhno(Long phno) {
+        Phno = phno;
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+}
