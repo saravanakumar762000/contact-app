@@ -94,6 +94,8 @@
 
 
 </RelativeLayout>
+java class:
+
 package com.example.signup;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -146,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
+Member:
+
 package com.example.signup;
 
 public class Register {
